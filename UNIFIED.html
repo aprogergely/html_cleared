@@ -1,347 +1,355 @@
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Puzzles - Interactive Experience</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: linear-gradient(45deg, #2c3e50, #34495e);
-            border-radius: 8px;
-            color: white;
-        }
-        .nav-button {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-        .nav-button:hover {
-            background: #2980b9;
-        }
-        .nav-button:disabled {
-            background: #7f8c8d;
-            cursor: not-allowed;
-        }
-        .puzzle-counter {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .message {
-            margin-bottom: 30px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .message-header.brawlers {
-            background: linear-gradient(180deg,rgba(62, 38, 105, 1) 50%, rgba(110, 43, 68, 1) 69%, rgba(171, 80, 62, 1) 80%, rgba(229, 128, 27, 1) 88%, rgba(255, 250, 247, 1) 100%);
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            color: #FFFAF7;
-        }
-        .message-header.rangers {
-            background: linear-gradient(320deg,rgba(250, 255, 255, 1) 21%, rgba(209, 255, 250, 1) 40%, rgba(208, 242, 232, 1) 63%, rgba(204, 247, 102, 1) 75%, rgba(103, 151, 75, 1) 92%, rgba(69, 74, 60, 1) 100%);
-            color: #503228;
-            border: 4px solid forestgreen;
-        }
-        .avatar.brawlers {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid #FF6916;
-            margin-right: 15px;
-            background: #ccc;
-            object-fit: cover;
-        }
-        .avatar.rangers {
-            border: 4px solid #CCF766;
-            border-radius: 25%;
-            box-shadow: 0px 0px 4px #503228;
-        }
-        .username.brawlers {
-            font-family: 'Arial Black', sans-serif;
-            font-size: 18px;
-            text-transform: uppercase;
-            color: #FFFAF7;
-            text-shadow: 0px 0px 4px #FF6916;
-        }
-        .username.rangers {
-            color: #FAFFFF;
-            text-shadow: 0px 0px 4px #503228;
-            font-family: 'Poiret One', serif;
-        }
-        .message-content {
-            padding: 20px;
-        }
-        .puzzle-box {
-            background: linear-gradient(45deg, #1e3c72, #2a5298);
-            border: 3px solid #4a90e2;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            color: #ecf0f1;
-            text-align: center;
-        }
-        .result-box {
-            background: #16a085;
-            border: 2px solid #1abc9c;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            color: #ecf0f1;
-            text-align: center;
-        }
-        .puzzle-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            margin: 10px 0;
-            display: block;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 10px 0;
-        }
-        th, td {
-            border: 1px solid #34495e;
-            padding: 8px;
-            text-align: left;
-            color: #2c3e50 !important;
-            background-color: rgba(255, 255, 255, 0.9) !important;
-        }
-        th {
-            background-color: #34495e !important;
-            color: #ecf0f1 !important;
-            font-weight: bold;
-        }
-        ul {
-            text-align: left;
-            margin: 10px 0;
-            padding-left: 20px;
-        }
-        hr {
-            border: none;
-            height: 2px;
-            background: linear-gradient(to right, transparent, #ecf0f1, transparent);
-            margin: 20px 0;
-        }
-        .timestamp {
-            color: #666;
-            font-size: 12px;
-            margin-bottom: 10px;
-        }
-        .quote-box {
-            background: #f8f9fa;
-            border-left: 4px solid #007bff;
-            padding: 10px 15px;
-            margin: 10px 0;
-            border-radius: 0 5px 5px 0;
-        }
-        .control-buttons {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .control-button {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        .control-button:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
-        .control-button.hints {
-            background: #f39c12;
-        }
-        .control-button.hints:hover {
-            background: #e67e22;
-        }
-        .control-button.solution {
-            background: #27ae60;
-        }
-        .control-button.solution:hover {
-            background: #229954;
-        }
-        .hidden {
-            display: none;
-        }
-        .puzzle-section {
-            margin-bottom: 30px;
-        }
-        .section-title {
-            background: #34495e;
-            color: white;
-            padding: 10px 15px;
-            margin: 20px 0 10px 0;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        .warning {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            color: #856404;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 10px 0;
-            text-align: center;
-        }
-    </style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Daily Puzzles - Interactive Experience</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f5f5f5;
+			margin: 0;
+			padding: 20px;
+			line-height: 1.6;
+		}
+		.container {
+			max-width: 1000px;
+			margin: 0 auto;
+			background: white;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+		}
+		.navigation {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 20px;
+			padding: 15px;
+			background: linear-gradient(45deg, #2c3e50, #34495e);
+			border-radius: 8px;
+			color: white;
+		}
+		.nav-button {
+			background: #3498db;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 14px;
+			transition: background 0.3s;
+		}
+		.nav-button:hover {
+			background: #2980b9;
+		}
+		.nav-button:disabled {
+			background: #7f8c8d;
+			cursor: not-allowed;
+		}
+		.puzzle-counter {
+			font-size: 18px;
+			font-weight: bold;
+		}
+		.message {
+			margin-bottom: 30px;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			overflow: hidden;
+		}
+		.message-header.brawlers {
+			background: linear-gradient(180deg,rgba(62, 38, 105, 1) 50%, rgba(110, 43, 68, 1) 69%, rgba(171, 80, 62, 1) 80%, rgba(229, 128, 27, 1) 88%, rgba(255, 250, 247, 1) 100%);
+			padding: 15px;
+			display: flex;
+			align-items: center;
+			color: #FFFAF7;
+		}
+		.message-header.rangers {
+			background: linear-gradient(320deg,rgba(250, 255, 255, 1) 21%, rgba(209, 255, 250, 1) 40%, rgba(208, 242, 232, 1) 63%, rgba(204, 247, 102, 1) 75%, rgba(103, 151, 75, 1) 92%, rgba(69, 74, 60, 1) 100%);
+			display: flex;
+			align-items: center;color: #503228;
+			border: 4px solid forestgreen;
+		}
+		.avatar.brawlers {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			border: 2px solid #FF6916;
+			box-shadow: 0px 0px 4px #3E2669;
+			margin-right: 15px;
+			background: #ccc;
+			object-fit: cover;
+		}
+		.avatar.rangers {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			border: 2px solid #CCF766;
+			box-shadow: 0px 0px 4px #503228;
+			margin-right: 15px;
+			object-fit: cover;
+		}
+		.username.brawlers {
+			font-family: 'Arial Black', sans-serif;
+			font-size: 18px;
+			text-transform: uppercase;
+			color: #FFFAF7;
+			text-shadow: 0px 0px 4px #FF6916;
+		}
+		.username.rangers {
+			font-family: 'Poiret One', serif;
+			font-size: 18px;
+			text-transform: uppercase;
+			color: #FAFFFF;
+			text-shadow: 0px 0px 4px #503228;
+		}
+		.message-content {
+			padding: 20px;
+		}
+		.puzzle-box {
+			background: linear-gradient(45deg, #1e3c72, #2a5298);
+			border: 3px solid #4a90e2;
+			padding: 20px;
+			margin: 15px 0;
+			border-radius: 10px;
+			box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+			color: #ecf0f1;
+			text-align: center;
+		}
+		.result-box {
+			background: #16a085;
+			border: 2px solid #1abc9c;
+			padding: 15px;
+			margin: 10px 0;
+			border-radius: 8px;
+			color: #ecf0f1;
+			text-align: center;
+		}
+		.puzzle-image {
+			max-width: 100%;
+			height: auto;
+			border-radius: 5px;
+			margin: 10px 0;
+			display: block;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+		}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin: 10px 0;
+		}
+		th, td {
+			border: 1px solid #34495e;
+			padding: 8px;
+			text-align: left;
+			color: #2c3e50 !important;
+			background-color: rgba(255, 255, 255, 0.9) !important;
+		}
+		th {
+			background-color: #34495e !important;
+			color: #ecf0f1 !important;
+			font-weight: bold;
+		}
+		ul {
+			text-align: left;
+			margin: 10px 0;
+			padding-left: 20px;
+		}
+		hr {
+			border: none;
+			height: 2px;
+			background: linear-gradient(to right, transparent, #ecf0f1, transparent);
+			margin: 20px 0;
+		}
+		.timestamp {
+			color: #666;
+			font-size: 12px;
+			margin-bottom: 10px;
+		}
+		.quote-box {
+			background: #f8f9fa;
+			border-left: 4px solid #007bff;
+			padding: 10px 15px;
+			margin: 10px 0;
+			border-radius: 0 5px 5px 0;
+		}
+		.control-buttons {
+			display: flex;
+			gap: 10px;
+			margin: 20px 0;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+		.control-button {
+			background: #e74c3c;
+			color: white;
+			border: none;
+			padding: 12px 24px;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 16px;
+			transition: all 0.3s;
+		}
+		.control-button:hover {
+			background: #c0392b;
+			transform: translateY(-2px);
+		}
+		.control-button.hints {
+			background: #f39c12;
+		}
+		.control-button.hints:hover {
+			background: #e67e22;
+		}
+		.control-button.solution {
+			background: #27ae60;
+		}
+		.control-button.solution:hover {
+			background: #229954;
+		}
+		.hidden {
+			display: none;
+		}
+		.puzzle-section {
+			margin-bottom: 30px;
+		}
+		.section-title {
+			background: #34495e;
+			color: white;
+			padding: 10px 15px;
+			margin: 20px 0 10px 0;
+			border-radius: 5px;
+			font-weight: bold;
+		}
+		.warning {
+			background: #fff3cd;
+			border: 1px solid #ffeaa7;
+			color: #856404;
+			padding: 15px;
+			border-radius: 5px;
+			margin: 10px 0;
+			text-align: center;
+		}
+	</style>
 </head>
 <body>
-    <div class="container">
-        <div class="navigation">
-            <button class="nav-button" id="prevBtn" onclick="previousPuzzle()">← Previous</button>
-            <div class="puzzle-counter">
-                <span id="puzzleCounter">Puzzle 4 of 9</span>
-            </div>
-            <button class="nav-button" id="nextBtn" onclick="nextPuzzle()">Next →</button>
-        </div>
+	<div class="container">
+		<div class="navigation">
+			<button class="nav-button" id="prevBtn" onclick="previousPuzzle()">← Previous</button>
+			<div class="puzzle-counter">
+				<span id="puzzleCounter">Puzzle 4 of 9</span>
+			</div>
+			<button class="nav-button" id="nextBtn" onclick="nextPuzzle()">Next →</button>
+		</div>
 
-        <div id="puzzle-content">
-            <!-- Puzzle content will be dynamically loaded here -->
-        </div>
+		<div id="puzzle-content">
+			<!-- Puzzle content will be dynamically loaded here -->
+		</div>
 
-        <div class="control-buttons">
-            <button class="control-button hints" onclick="toggleHints()" id="hintsBtn">Show Hints & Comments</button>
-            <button class="control-button solution" onclick="toggleSolution()" id="solutionBtn">Show Solution</button>
-        </div>
+		<div class="control-buttons">
+			<button class="control-button hints" onclick="toggleHints()" id="hintsBtn">Show Hints & Comments</button>
+			<button class="control-button solution" onclick="toggleSolution()" id="solutionBtn">Show Solution</button>
+		</div>
 
-        <div id="hints-section" class="puzzle-section hidden">
-            <div class="section-title">💡 Hints & Comments</div>
-            <div id="hints-content"></div>
-        </div>
+		<div id="hints-section" class="puzzle-section hidden">
+			<div class="section-title">💡 Hints & Comments</div>
+			<div id="hints-content"></div>
+		</div>
 
-        <div id="solution-section" class="puzzle-section hidden">
-            <div class="section-title">✅ Solution</div>
-            <div class="warning">
-                <strong>⚠️ Spoiler Alert!</strong><br>
-                Make sure you've tried solving the puzzle yourself before viewing the solution.
-            </div>
-            <div id="solution-content"></div>
-        </div>
-    </div>
+		<div id="solution-section" class="puzzle-section hidden">
+			<div class="section-title">✅ Solution</div>
+			<div class="warning">
+				<strong>⚠️ Spoiler Alert!</strong><br>
+				Make sure you've tried solving the puzzle yourself before viewing the solution.
+			</div>
+			<div id="solution-content"></div>
+		</div>
+	</div>
 
-    <script>
-        let currentPuzzle = 0;
-        let hintsVisible = false;
-        let solutionVisible = false;
+	<script>
+		let currentPuzzle = 0;
+		let hintsVisible = false;
+		let solutionVisible = false;
 
-        const puzzles = [
-            {
-                id: 1,
-                title: "The First Letter",
-                content: `
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                            <div class="puzzle-box">
-                                <div>The developement of Lumiose City just started, you were on your way to work when you noticed<br>
-                                something in the letterbox. There you uncovered the following letter:<br>
-                                <img src="LETTER 1.png" alt="First letter" class="puzzle-image">
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div><strong>Can you decipher where the tree is located?</strong></div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                hints: `
-                `,
-                solution: `
-                    <div class="result-box">
-                        <div>Puzzle 1 deadline is closed!<br>
+		const puzzles = [
+			{
+				id: 1,
+				title: "The First Letter",
+				content: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+							<div class="puzzle-box">
+								<div>The developement of Lumiose City just started, you were on your way to work when you noticed<br>
+								something in the letterbox. There you uncovered the following letter:<br>
+								<center><img src="LETTER 1.png" alt="First letter" class="puzzle-image"></center></div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div><strong>Can you decipher where the tree is located?</strong></div>
+							</div>
+						</div>
+					</div>
+				`,
+				hints: `
+				`,
+				solution: `
+					<div class="result-box">
+						<div>Puzzle 1 deadline is closed!<br>
 						The solution was Reflection Cave, prepare for some mountaineering!<br>
 						This was a connect-the letters puzzle, to create the name of a location using up all the letters!<br>
 						Unfortunately those who did not realize this at all and found the location by assuming its an anagram do not get any points as I decided this would be considered guessing the answer in this case.<br>
 						(Those who then still connected the letters correctly and provided an image have gotten full points)<br>
-                        <img src="wordplay_solution.png" alt="Letter 1 solution" class="puzzle-image"></div>
-                    </div>
-                `
-            },
-            {
-                id: 2,
-                title: "Mr. Rhyme",
-                content: `
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
+						<center><img src="wordplay_solution.png" alt="Letter 1 solution" class="puzzle-image"></center></div>
+					</div>
+				`
+			},
+			{
+				id: 2,
+				title: "Mr. Rhyme",
+				content: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
 							<div class="puzzle-box">
-                                <div>What a rare opportunity opportunity! Unfortunately, your team doesn't share your enthusiasm.<br>
+								<div>What a rare opportunity opportunity! Unfortunately, your team doesn't share your enthusiasm.<br>
 								Without a proper map and relying only on a stranger's cryptic directions, you'll need to tackle this journey alone.<br>
 								The first obstacle: securing funds for the essential equipment you'll need for the journey...<br></div>
-                            </div>
-                            <div class="puzzle-box">
-                                <div>The infamous Mr. Rhyme is currently in town! This mysterious figure is renowned for their vast knowledge and love for riddles.<br>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div>The infamous Mr. Rhyme is currently in town! This mysterious figure is renowned for their vast knowledge and love for riddles.<br>
 								They're known to reward clever souls with valuables or precious information.<br>
 								Upon entering, you notice them reading a letter.<br>
-                                <img src="MrRhyme_1.png" alt="First letter" class="puzzle-image"><br>
+								<center><img src="MrRhyme_1.png" alt="First letter" class="puzzle-image"></center><br>
 								I'm in a great mood because I just read something really interesting, so I'll give you something simple!<br>
 								You see those two stashes of gold coins on my table?<br>
 								Here's my offer: Tell me something I don't already know, and I'll reward you with one of them.<br>
 								The information you provide will determine which sack you receive.<br>
 								However, I must warn you: if you dare to lie to me, you'll leave here empty-handed!
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div><strong>What would you tell Mr. Rhyme to guarantee earning the larger stack of gold coins?<br>
+								</div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div><strong>What would you tell Mr. Rhyme to guarantee earning the larger stack of gold coins?<br>
 								Personal information about yourself will only earn the smaller reward.<br>
 								You're competing against Mr. Rhyme's knowledge, not mine.</strong></div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                hints: `
+							</div>
+						</div>
+					</div>
+				`,
+				hints: `
 					<div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                            <div>This seemed to be a very difficult puzzle to most of you, but thats pertially on me for perhaps including a little too much flavour text...<br>
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+							<div>This seemed to be a very difficult puzzle to most of you, but thats pertially on me for perhaps including a little too much flavour text...<br>
 							Therefore, let me give you all some hints and extend the deadline by another 24 hours.<br>
 							So how knowledgeble is Mr. Rhyme really?<br>
 							At the very least, he is more knowledgeable than you are.<br>
@@ -352,40 +360,40 @@
 							The solution to the puzzle is much more simple and straightforward.<br>
 							He does not yet know what you will answer to his question!<br>
 							Answer in a way that forces them to either give you the big sack of coins or go against the promises he told you!<br></div>
-                        </div>
-                    </div>
-                    <div class="message">
-                        <div class="message-header rangers">
-                            <img src="elinthind_avatar.jpg" alt="elinthind" class="avatar rangers">
-                            <div class="username rangers">elinthind</div>
-                        </div>
-                        <div class="message-content">
-                            <div>Hi! I'm a little confused on the goal of the puzzle.<br>
-                            Do we need to give Mr. Rhyme new knowledge, or just identify something that he does not know?<br>
-                            Also, in this hint is sounds like you're saying that "He does not yet know what you will answer to his question!", but Mr. Rhyme never gave us a question except for when he asked if we "see those two stashes of gold coins on my table?"-- is that what this is referring to? Or is he referring to the challenge he issued? (I realize this is a somewhat pedantic question, but, in the context of the solution for a riddle, that could be an important distinction, so I had to ask!)<br>
-                            Also, does Mr. Rhyme have the ability to know the future and/or read a person's mind, or know what's behind him? If we can't assume that he doesn't know how to fly, then it also seems possible that we can't assume he doesn't have psychic abilities like that--but I could be overthinking this, so I had to ask!<br>
-                            Sorry for all the questions, and thanks for making these riddles! I've been having a lot of fun with them so far :)</div>
-                        </div>
-                    </div>
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                            <div class="quote-box">
-                                <strong>elinthind said:</strong><br>
-                                Hi! I'm a little confused on the goal of the puzzle.
-                            </div>
-                            <div>You need to give him new knowledge.<br>
-                            By question I meant the request "tell me something I dont already know", sorry it wasnt clear.<br>
-                            No he cant read your mind or predict the future as it would then be impossible to give him new knowledge at all</div>
-                        </div>
-                    </div>
-                `,
-                solution: `
-                    <div class="result-box">
-                        <div>Still no correct solutions submitted!<br>
+						</div>
+					</div>
+					<div class="message">
+						<div class="message-header rangers">
+							<img src="elinthind_avatar.jpg" alt="elinthind" class="avatar rangers">
+							<div class="username rangers">elinthind</div>
+						</div>
+						<div class="message-content">
+							<div>Hi! I'm a little confused on the goal of the puzzle.<br>
+							Do we need to give Mr. Rhyme new knowledge, or just identify something that he does not know?<br>
+							Also, in this hint is sounds like you're saying that "He does not yet know what you will answer to his question!", but Mr. Rhyme never gave us a question except for when he asked if we "see those two stashes of gold coins on my table?"-- is that what this is referring to? Or is he referring to the challenge he issued? (I realize this is a somewhat pedantic question, but, in the context of the solution for a riddle, that could be an important distinction, so I had to ask!)<br>
+							Also, does Mr. Rhyme have the ability to know the future and/or read a person's mind, or know what's behind him? If we can't assume that he doesn't know how to fly, then it also seems possible that we can't assume he doesn't have psychic abilities like that--but I could be overthinking this, so I had to ask!<br>
+							Sorry for all the questions, and thanks for making these riddles! I've been having a lot of fun with them so far :)</div>
+						</div>
+					</div>
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+							<div class="quote-box">
+								<strong>elinthind said:</strong><br>
+								Hi! I'm a little confused on the goal of the puzzle.
+							</div>
+							<div>You need to give him new knowledge.<br>
+							By question I meant the request "tell me something I dont already know", sorry it wasnt clear.<br>
+							No he cant read your mind or predict the future as it would then be impossible to give him new knowledge at all</div>
+						</div>
+					</div>
+				`,
+				solution: `
+					<div class="result-box">
+						<div>Still no correct solutions submitted!<br>
 						This puzzle was combination of true-false statements, truth-and-lies.<br>
 						Mr. Rhyme claimed he will decide which sack of coins to give you depending on your answer, so he does not yet know what you will be getting.<br>
 						He also claimed to give you nothing if you are lying.<br>
@@ -394,91 +402,91 @@
 						If the statement is correct, then he cannot give you the smaller sack, but it contains new information so he must give you something. Which means you are guaranteed to get the bigger sack of coins!<br>
 						Awards 7500 PokéDollars to 5qwerty who actually had the right idea from before the hint but couldn't quite get the answer working.<br>
 						Also well done for Elinthind who almost got it right at the very last moment!<br></div>
-                    </div>
-                `
-            },
-            {
-                id: 3,
-                title: "The caterpillars",
-                content: `
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="puzzle-box">
-                                <div>Mr. Rhyme is surprised by the witty reply and reluctantly hands over the bigger sack of coins, afterall, he did make a promise.<br>
+					</div>
+				`
+			},
+			{
+				id: 3,
+				title: "The caterpillars",
+				content: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="puzzle-box">
+								<div>Mr. Rhyme is surprised by the witty reply and reluctantly hands over the bigger sack of coins, afterall, he did make a promise.<br>
 								Having secured some funds this way, you head straight to the Hiker's guild for some hiking equipment, it won't be an easy trip.<br>
 								A new backpack, a pickaxe, ropes, lamp, protective gear… Even with all that money, your budget is tight!<br>
 								Seeing your clouded expression, one of the regulars approaches you with an offer:<br></div>
-                            </div>
-                            <div class="puzzle-box">
-                                <div>Hello there! I see you're a little tight on the money, but I'll tell you what!<br>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div>Hello there! I see you're a little tight on the money, but I'll tell you what!<br>
 								I've got some personal troubles myself, so perhaps we can help each other out.<br>
 								If you can give advice with the problem I'm facing, you can have my old equipment half off. A little worn, but still useable.<br>
 
 								You see, I'm the father of two wonderful daughters, and these cute little angels are very fond of the Pokémon Beautifly.<br>
 								Yesterday, I encountered a Bug Catcher who offered me a fantastic deal on a dozen Wurmple - naturally, I couldn't pass up such an opportunity!<br>
 								They did tell me only 9 out of these 12 will evolve into Silcoon, but thats alright, I also got some rare powder from them that could alter the evolutionary path of any Wurmple it is fed to!<br>
-                                <img src="wurmple.png" alt="Caterpillars" class="puzzle-image">
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div><strong>Here's my dilemma: I completely forgot to ask which specific Wurmple will evolve into what, and they are almost indistinguishable even to most experts...<br>
+								<center><img src="wurmple.png" alt="Caterpillars" class="puzzle-image"></center></div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div><strong>Here's my dilemma: I completely forgot to ask which specific Wurmple will evolve into what, and they are almost indistinguishable even to most experts...<br>
 								Could you please help me divide these Wurmples into two groups, and decide which one(s) to give the special feed to?<br>
 								I want to make sure both of my daughters can experience the joy of raising their Wurmples into Beautiflies the exact same number of times.<br>
 								If some Dustox end up in the mix, that's perfectly fine - but neither group can contain more Beautiflies than the other!</strong></div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                hints: `
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="kitty_avatar.jpg" alt="Kitty" class="avatar brawlers">
-                            <div class="username brawlers">Kitty</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div>Are all the images in the puzzles simply for flavor? Should we focus on the text?</div>
-                        </div>
-                    </div>
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="quote-box">
-                                <strong>Kitty said:</strong><br>
-                                Are all the images in the puzzles simply for flavor? Should we focus on the text?
-                            </div>
-                            <div>The image is used to visualize the situation explained in the text. You can solve most puzzles without relying on the image. But there are also a few visual puzzles like the first one was, where it plays a crucial role.</div>
-                        </div>
-                    </div>
-                `,
-                solution: `
-                    <div class="result-box">
-                        <div>Puzzle 3 deadline is closed!<br>
+							</div>
+						</div>
+					</div>
+				`,
+				hints: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="kitty_avatar.jpg" alt="Kitty" class="avatar brawlers">
+							<div class="username brawlers">Kitty</div>
+						</div>
+						<div class="message-content">
+								<div>Are all the images in the puzzles simply for flavor? Should we focus on the text?</div>
+						</div>
+					</div>
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="quote-box">
+								<strong>Kitty said:</strong><br>
+								Are all the images in the puzzles simply for flavor? Should we focus on the text?
+							</div>
+							<div>The image is used to visualize the situation explained in the text. You can solve most puzzles without relying on the image. But there are also a few visual puzzles like the first one was, where it plays a crucial role.</div>
+						</div>
+					</div>
+				`,
+				solution: `
+					<div class="result-box">
+						<div>Puzzle 3 deadline is closed!<br>
 						Sadly, theres no way to distinguish the Wurmples. Most of you looked for visual queues… We are not expert Bug Catchers so how are we really supposed to guess that?<br>
 						The correct answer is to divide the Wurmples into a group of 3 and 9 Wurmples (note its not specified they have to be of equal size) and use the powder on the bigger group group.<br>
 						This means that while we cannot predict how many Beautiflies end up in each group, they are guaranteed to be of the same amount! See table below:<br></div>
-                    </div>
-                `
-            },
-            {
-                id: 4,
-                title: "The Candle Maker's Problem",
-                content: `
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="puzzle-box">
-                                <div>The Hiker is grateful for the advice and happily gives you their backpack!
+					</div>
+				`
+			},
+			{
+				id: 4,
+				title: "The Candle Maker's Problem",
+				content: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="puzzle-box">
+								<div>The Hiker is grateful for the advice and happily gives you their backpack!
 								Obtained the following items (some of which wont be necessary, but its best to prepare well!):
 								a few gold coins still left
 								a worn-out backpack
@@ -494,664 +502,707 @@
 								The set has not contained any candles for the lamp!
 								You cannot leave for cave exploration without a proper lightsource…
 								You head straight to candlemaker's shop...</div>
-                            </div>
-                            <div class="puzzle-box">
-                                <div>677... 678... 679!<br>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div>677... 678... 679!<br>
 								Oh, hello there young one! You have come just at the right time!<br>
 								I need some help arranging my storage.<br>
 								I have just finished counting these leftovers I've gotten.<br>
 								You see, this year we decided to do some recycling!<br>
 								Customers brought back the leftovers from their used candles and I make new ones out of those.<br>
-								For every 7 candle I sell, I can craft a new one!<br></div>
-								<img src="candles.png" alt="Candles" class="puzzle-image">
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div><strong>Could you help me figure out how many candles I will be able to craft in total from what I currently have?​</strong></div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                hints: ``,
-                solution: `
-                    <div class="result-box">
-                        <div>
-                        Puzzle 4 deadline is closed!<br>
-                        This was a very popular puzzle with several correct solutions!<br>
-                        You start with 679 leftovers.<br>
-                        From those, you make 679/7 = 97 make candles and no leftovers remain<br>
-                        However, once you sold them, the customers will bring back their leftovers again!<br>
-                        So you can make another 97/7 = 13 candles and will have 6 leftovers remaining<br>
-                        Then, they bring back 13 leftovers. Along with the previous 6, you have 19 leftovers, enough for 2 new candles and 5 leftovers remaining<br>
-                        Finally, when they bring back those two candles, you will have a total of 7 leftovers, enough for one more final candle to be crafted.<br>
+								For every 7 candle I sell, I can craft a new one!<br>
+								<center><img src="candles.png" alt="Candles" class="puzzle-image"></center></div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div><strong>Could you help me figure out how many candles I will be able to craft in total from what I currently have?​</strong></div>
+							</div>
+						</div>
+					</div>
+				`,
+				hints: ``,
+				solution: `
+					<div class="result-box">
+						<div>
+						Puzzle 4 deadline is closed!<br>
+						This was a very popular puzzle with several correct solutions!<br>
+						You start with 679 leftovers.<br>
+						From those, you make 679/7 = 97 make candles and no leftovers remain<br>
+						However, once you sold them, the customers will bring back their leftovers again!<br>
+						So you can make another 97/7 = 13 candles and will have 6 leftovers remaining<br>
+						Then, they bring back 13 leftovers. Along with the previous 6, you have 19 leftovers, enough for 2 new candles and 5 leftovers remaining<br>
+						Finally, when they bring back those two candles, you will have a total of 7 leftovers, enough for one more final candle to be crafted.<br>
 
-                        So the answer is, you can make 97+13+2+1=113 candles!<br>
+						So the answer is, you can make 97+13+2+1=113 candles!<br>
 
-                        As a sidenote, the same number can be reached by noticing that if you burn a candle, only 6/7 of the candle is gone, the  rest will be recycled.<br>
-                        So from the 97 candles you made initially, you will be able to burn them 97 * 7/6 = 113 times in total.
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 5,
-                title: "The Hippo Race Dilemma",
-                content: `
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="puzzle-box">
-                                <div>Using the ticket you received along with the letter, you have joined the race as the jockey of Hippopotas #6.
-                                To ensure you get the map, you decide to lag behind your competitors… But wait! Someone else is doing the same!
-                                You are up against a member of the opposing team!
-                                This is no good, they are determined to beat -ahem, I mean loose to- you at any cost
-                                and eventually the two of you stop in the middle of the race, neither of you willing to move forward…</div>
-                            </div>
-                            <div class="puzzle-box">
-                                <div>If you don't make the goal at all, no prize will be given, but if you do move, you can't be the last to make it!
-                                Thinking quickly, you suggest that you let them win if they share the reward with you afterwards.
-                                Unfortunately they reject the idea and won't nudge unless they can have a fair Hippo race against you.
-                                <img src="race2.png" alt="Hippos" class="puzzle-image"></div>
-                            </div>
-                            <div class="puzzle-box">
-                                <div><strong>Can you think of any way to keep this a fair contest while ensuring both of you finish the race in time?</strong></div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                hints: `
-                    <div class="message">
-                        <div class="message-header rangers">
-                            <img src="elinthind_avatar.jpg" alt="elinthind" class="avatar rangers">
-                            <div class="username rangers">elinthind</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div>Could you clarify what is meant by a "fair" race in the hippo puzzle?<br><br>thanks!</div>
-                        </div>
-                    </div>
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="quote-box">
-                                <strong>elinthind said:</strong><br>
-                                Could you clarify what is meant by a "fair" race in the hippo puzzle?<br><br>thanks!
-                            </div>
-                            <div>Fair as in both of you following the rules set by the competition and any additional rules you may agree upon. They think of predeciding the looser and then sharing the prize as unfair.</div>
-                        </div>
-                    </div>
-                `,
-                solution: `
-                    <div class="result-box">
-                        <div>Nobody liked the Hippos :(<br>
-                        Got very few submissions, but unfortunately one of them was correct so no hints are given...<br>
-                        This was a vague puzzle too where I might've accepted alternative solutions...<br>
-                        Unfortunately not Dogparty's though, as it was stated in the puzzle that they don't wish to share the prize.<br>
-                        <br>
-                        The solution should be to simply <strong>swap Hippos</strong> (or tickets, whichever you find easier).<br>
-                        By using eachother's Hippos, the consolation prize will actually go to the winner rather than the looser.<br>
-                        <br>
-                        As Elinthind pointed out, this does assume that both racers play fairly and do reach the goal though,<br>
-                        so if somebody play unfairly, then the first person reaching the goal would still have to<br>
-                        go back to drag their own Hippo to the goal as well.</div>
-                    </div>
-                `
-            },
-            {
-                id: 6,
-                title: "The Four Vehicles",
-                content: `
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="puzzle-box">
-                                <div>After coming to an agreement, you both dart off towards the goal at once.<br>
-                                Its a close call, but luckily you manage to secure the consolation prize.<br>
-                                You quickly open the map and... Its empty!<br>
-                                Well, nothing to do about that now... You stuck it in your backpack and continue moving forward.<br>
-                                After walking on Route 12 for a while, you arrive at a crossroad.<br>
-                                This wasn't here last time, did they change the path?<br>
-                                You are unsure which way you are supposed to go, but thankfully you notice a familiar face standing there.<br>
-                                Its Mr. Rhyme! I wonder what he is doing out here?<br>
-                                He is willing to help you find the right path if you solve one of his favourite puzzles:<br>
-                                </div>
-                            </div>
-                            <div class="puzzle-box">
-                                <div>There are four different type of vehicles traveling in the ocean exactly 500 meters apart from eachother.<br>
-                                At the front is a luxury yacht. On the left side an old sailboat. On the right a large steamboat.<br>
-                                <img src="boats.png" alt="Boats diagram" class="puzzle-image">
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div><strong>What is the fourth vehicle?</strong></div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                hints: `
-                    <div class="message">
-                        <div class="message-header rangers">
-                            <img src="elinthind_avatar.jpg" alt="elinthind" class="avatar rangers">
-                            <div class="username rangers">elinthind</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div>Also, when you say "500 meters apart" in the vehicle puzzle--does that mean each vehicle is at least 500 meters away from the others in each direction? Is the image to scale, or is it just for flavor?<br><br>thanks!</div>
-                        </div>
-                    </div>
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="quote-box">
-                                <strong>elinthind said:</strong><br>
-                                Also, when you say "500 meters apart" in the vehicle puzzle--does that mean each vehicle is at least 500 meters away from the others in each direction? Is the image to scale, or is it just for flavor?<br><br>thanks!
-                            </div>
-                            <div>The image for the ships is meant to be accurate, however it was not measured so it could be off by a few cms. If you used a ruler to determine that the 3 boats on the image are not equidistant than thats just slight drawing error.</div>
-                        </div>
-                    </div>
-                `,
-                solution: `
-                    <div class="result-box">
-                        <div>Puzzle 6 deadline is closed!<br>
-                        We had many great submissions for this puzzle!<br>
-                        As for the solution, 4 objects can only be of equal distance from eachother if they are placed into the corners of a pyramid shape.<br>
-                        This means, that the last vehicle must be either above or below the sea level.<br>
-                        Since it was specified that they are in the sea, the correct solution is a submarine!<br>
-                        I'd like to congratulate to Venia Silente for deducting that it may be a nuclear submarine<br>
-                        at that given that all vehicles are using a different power source.<br>
-                        This was not a neccessary part of the solution though, and unfortunately have no way to give bonus points for it.</div>
-                    </div>
-                `
-            },
-            {
-                id: 7,
-                title: "The Cave Passage",
-                content: `
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="puzzle-box">
-                                <div>You manage to arrive to Shalour City safely and take a short rest at the inn.<br>
-                                The following morning as you approach the cave, you notice a small crowd in front of it:<br>
-                                <br>
-                                You learn that there was a cave-in at the passage, making it significantly more difficult to get through<br>
-                                and the sunlight that used to seep through the ceiling is blocked.<br>
-                                The Hiker has a lamp, but no candles left and don't want to walk back to Lumiosa City for the nearest candle shop<br>
-                                so they ask you for their help:</div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div>Due to the passage becoming thinner, and under the dim light of the candle, only 2 people may pass at a time.<br>
-                                The Hiker, having experience, can pass the cave in 1 hour.<br>
-                                The Psychic, as a regular person would take 2 hours.<br>
-                                The Socialite may be old but healthy. Needs 4 hours to pass.<br>
-                                Mr. Rhyme, due to his bad leg, requires 5 hours.<br>
-                                <img src="caveentrance.png" alt="Boats diagram" class="puzzle-image">
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div><strong>If a candle burns for 1 hour, how many candles do you need to lend<br>
-                                so that all of them can pass while you go to explore the deeper parts of the cave?</strong></div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                hints: `
-                    <div class="message">
-                        <div class="message-header rangers">
-                            <img src="elinthind_avatar.jpg" alt="elinthind" class="avatar rangers">
-                            <div class="username rangers">elinthind</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div>Hi! Looking for a bit of clarification on this question:<br>
-                            Do the travelers need to find a way to always have access to the lamp, or is simply having a candle fine?<br>
-                            Are the travelers fine with traveling at a slower pace?<br>
-                            Does the "only 2 people can pass at a time" mean that a candle can be shared between a maximum of two people? (I'm assuming so, but you know what they say about assumptions)<br>
-                            Is it alright if more than one "bunch" of people passes through the cave at once, if each group has their own candle? Assuming the first group is farther ahead than the second. And, if so, is there enough room in the cave for people to switch between groups?<br>
-                            <br>
-                            Or, does having one candle in the cave count as having the whole "cave" being lit, and only 2 people can be in the cave at one time?</div>
-                        </div>
-                    </div>
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="quote-box">
-                                <strong>elinthind said:</strong><br>
-                                Hi! Looking for a bit of clarification on this question:...
-                            </div>
-                            <div>They may not hold the candle in their hands as it is too hot, nor in any flammable material.<br>
-                            A traveler cannot move forward in darkness.<br>
-                            The lamp (candlelight) only provides enough light for two people at a time.<br>
-                            When people move as a group, they move at the pace of the slowest member of that group.</div>
-                        </div>
-                    </div>
-                `,
-                solution: `
-                    <div class="result-box">
-                        <div>Traditionally, this puzzle is solved by having the travelers pass in groups of two,<br>
-                        and somebody repeatedly coming back with the lamp to pick up another person.<br>
-                        However, if you knew the puzzle, it was easy to get it wrongly,<br>
-                        because this time it had a slight twist!<br>
-                        <br>
-                        The Psychic, as shown in the image, can <strong>levitate small objects</strong> the size of a candle.<br>
-                        Assuming they can do so for 2 hours straight, two groups may try to pass simultaneously,<br>
-                        and they'd only need <strong>7 candles</strong>!</div>
-                    </div>
-                `
-            },
-            {
-                id: 8,
-                title: "The Cave Map",
-                content: `
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="puzzle-box">
-                                <div>As you reach into your backpack for a stack of candles for the group, the map falls out your bag.<br>
-                                As you pick it up, you notice a weird reflection in a smooth rock near the entrance.<br>
-                                Its a map of the cave!</div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div>As you suspected, the map never was empty, but there was a slight trick to it:<br>
-                                It was written with special ink only visible in the strange mirror-like rocks of Reflection Cave!<br>
-                                <img src="cave map.png" alt="Cave map with numbered paths" class="puzzle-image">
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div>It looks like there may be multiple paths leading to the tree you seek,<br>
-                                however you dont have a large enough stock of candles to roam freely,<br/>
-                                <strong>can you find the fastest path to the hidden groove?</strong></div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                hints: `
-                    <div class="message">
-                        <div class="message-header rangers">
-                            <img src="venia_silente_avatar.jpg" alt="Venia" class="avatar rangers">
-                            <div class="username rangers">Venia Silente</div>
-                        </div>
-                        <div class="message-content">
-                            <div>A bit of clarification on the map:<br><br>
-                            What do the numbers represent? Cost in candles to reach each spot? Speed limit? (hey, safety in caves is important!)</div>
-                        </div>
-                    </div>
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="quote-box">
-                                <strong>Venia Silente said:</strong><br>
-                                A bit of clarification on the map:<br><br>
-                                What do the numbers represent? Cost in candles to reach each spot? Speed limit? (hey, safety in caves is important!)
-                            </div>
-                            <div>The time (or distance) needed to get there from a previous number. You may interpret the puzzle as finding a path with the smallest sum of the numbers on that path</div>
-                        </div>
-                    </div>
-                    <div class="message">
-                        <div class="message-header rangers">
-                            <img src="elinthind_avatar.jpg" alt="Elinthind" class="avatar rangers">
-                            <div class="username rangers">Elinthind</div>
-                        </div>
-                        <div class="message-content">
-                            <div>what is the little symbol at the bottom right of the map? Is that our location?<br>
-                            (I assumed so but i have learned to be wary of my assumptions here lol)</div>
-                        </div>
-                    </div>
-                `,
-                solution: `
-                    <div class="result-box">
-                        <div>Solving the map was surprisingly simply, almost as if I sent the wrong image,<br>
-                        regardless, all submissions turned out to be correct...<br>
-                        I also forgot to specify that you cannot go around the cave, so while its not the intended solution,<br>
-                        I'll have to accept that too. Nobody submitted both however, so the achievement for<br>
-                        two correct solutions submitted remains unclaimed.<br>
-                        <br>
-                        Earlier, somebody asked what the symbol at the bottom is. I did not answer this question,<br>
-                        because the puzzle provides enough details to figure it out and it is in fact a key part<br>
-                        of the puzzle - even if it was trivial to most participants.<br>
-                        To those who havent played the newer generation games: This is the in-game sprite of the<br>
-                        Shalour Sable, a local delicacy sold only in Shalour City and is merely a symbol<br>
-                        representing the settlement. You do not need to turn around and start the map at the Tower of Mastery.<br>
-                        <img src="map_solution.jpg" alt="Map solution showing optimal path" class="puzzle-image">
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 9,
-                title: "The Ancient Lock",
-                content: `
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="puzzle-box">
-                                <div>You follow the map's instructions and eventually reach a large builder with a smooth surface.<br>
-                                Somebody has drawn strange symbols on the rocks. Upon closer inspection, these appear to be buttons!</div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div>You press one to see what happens, but it jumps right back into position and nothing happens, there must be some sort of code to enter...<br>
-                                <img src="LOCK.png" alt="Ancient lock with button pattern" class="puzzle-image">
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div><strong>Send me which buttons you press and in what order!</strong></div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                hints: ``,
-                solution: `
-                    <div class="result-box">
-                        <div>The letter in the puzzle represent a direction: Up, Down, Left, Right.<br>
-                        Each button has to be pressed once, finishing with the middle button<br>
-                        If you figured this out, you can simply add the number of steps<br>
-                        that need to be taken in every direction:<br>
-                        7 Left, 9 Right, 18 Down,17 Up<br>
-                        So you need to start <strong>2 steps to the left and 1 step up from the middle button</strong>.</div>
-                    </div>
-                `
-            },
-            {
-                id: 10,
-                title: "The Guardian Dog",
-                content: `
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="puzzle-box">
-                                <div>You crack the code open and an ancient door slowly creaks open,<br>
-                                revealing a long, narrow passage leading further up the mountain.<br>
-                                You walk for another half an hour or so before seeing the light at the end of the tunnel.<br>
-                                Finally, you step out into the meadow and find yourself on a cliffside.<br>
-                                In the middle, you spot the tree from the rumours!<br>
-                                However, someone has already been here before you!</div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div>Tied to its trunk is a Pokémon the previous visitor has left behind for protection.<br>
-                                It seems to be in great condition despite seemingly being alone, with food and water provided<br>
-                                for it in two bowls below the tree as well. Couldn't have been stuck there for more than an hour.<br>
-                                Perhaps its owner is still nearby or planning to return shortly.<br>
-                                Either way, you don't wish to wait for their return, just grab some fruits and head back home.<br>
-                                However, the dog was clearly placed here with a mission. Anywhere you go it'll try to follow<br>
-                                and if you get within range it'll attack immediately.<br>
-                                <img src="guarddog.png" alt="Guard dog tied to tree with food and water bowls" class="puzzle-image">
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div><strong>How can you get to the fruits safely?</strong></div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div><span style="font-size: 18px">List of available items:</span><br>
-                                <ul>
-                                    <li>a worn-out backpack</li>
-                                    <li>sleeping bag</li>
-                                    <li>knife</li>
-                                    <li>pickaxe</li>
-                                    <li>helmet</li>
-                                    <li>raincoat</li>
-                                    <li>30 meters of rope</li>
-                                    <li>lamp</li>
-                                    <li>one last candle</li>
-                                    <li>a sandwitch</li>
-                                    <li>water bottle (almost empty)</li>
-                                    <li>map of the cave</li>
-                                </ul></div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                hints: ``,
-                solution: `
-                    <div class="result-box">
-                        <div>Puzzle 10 deadline is closed!<br>
-                        Just as I was getting worried of the difficulty, 5qwerty has submitted the correct answer!<br>
-                        There isn't really anything in your bag that could reliably distract the Mabostiff, the item list was<br>
-                        provided as a distraction and to incentivise creative solutions I didn't think of (for the achievement).<br>
-                        You start slowly circling around the tree outside of the Pokémon's range as it is carefully watching and following you.<br>
-                        As you both keep going in circles, the leash gets entangled onto the tree's trunk and gradually becomes shorter.<br>
-                        Eventually you get close enough to reach one of the further branches and grab a fruit without fully reaching the tree.</div>
-                    </div>
-                `
-            },
-            {
-                id: 11,
-                title: "Descending the cliffside",
-                content: `
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="puzzle-box">
-                                <div>The mission was a success! Now you can return and plant the fruit in your own city!<br>
+						As a sidenote, the same number can be reached by noticing that if you burn a candle, only 6/7 of the candle is gone, the  rest will be recycled.<br>
+						So from the 97 candles you made initially, you will be able to burn them 97 * 7/6 = 113 times in total.
+						</div>
+					</div>
+				`
+			},
+			{
+				id: 4.5,
+				title: "The Second Letter",
+				content: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="puzzle-box">
+								<div>This post is pure flavour text, no puzzle yet, skip if dont want to read!<br>
+                                Once you have helped the candlemaker, they are more than happy to sell you some candles.<br>
+                                You spend the rest of your money on food and take a rest for the day. The journey starts tomorrow!<br></div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div>The next morning you find another letter in the letterbox:<br>
+								<center><img src="letter 2.png" alt="Second letter" class="puzzle-image"></center><br>
+								You notice a ticket attached to the letter.<br>
+                                On your way to the race!<br></div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div>Updated list of items:<br>
+                                *a worn-out backpack<br>
+                                *sleeping bag<br>
+                                *knife<br>
+                                *pickaxe<br>
+                                *water bottle (full)<br>
+                                *helmet<br>
+                                *raincoat<br>
+                                *30 meters of rope<br>
+                                *lamp<br>
+                                *candles (for the lamp)<br>
+                                *sandwitches<br>
+                                *race ticket #6<br></div>
+							</div>
+						</div>
+					</div>
+				`,
+				hints: ``,
+				solution: `
+				`
+			},
+			{
+				id: 5,
+				title: "The Hippo Race",
+				content: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="puzzle-box">
+								<div>Using the ticket you received along with the letter, you have joined the race as the jockey of Hippopotas #6.
+								To ensure you get the map, you decide to lag behind your competitors… But wait! Someone else is doing the same!
+								You are up against a member of the opposing team!
+								This is no good, they are determined to beat -ahem, I mean loose to- you at any cost
+								and eventually the two of you stop in the middle of the race, neither of you willing to move forward…</div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div>If you don't make the goal at all, no prize will be given, but if you do move, you can't be the last to make it!
+								Thinking quickly, you suggest that you let them win if they share the reward with you afterwards.
+								Unfortunately they reject the idea and won't nudge unless they can have a fair Hippo race against you.
+								<center><img src="race2.png" alt="Hippos" class="puzzle-image"></center></div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div><strong>Can you think of any way to keep this a fair contest while ensuring both of you finish the race in time?</strong></div>
+							</div>
+						</div>
+					</div>
+				`,
+				hints: `
+					<div class="message">
+						<div class="message-header rangers">
+							<img src="elinthind_avatar.jpg" alt="elinthind" class="avatar rangers">
+							<div class="username rangers">elinthind</div>
+						</div>
+						<div class="message-content">
+								<div>Could you clarify what is meant by a "fair" race in the hippo puzzle?<br><br>thanks!</div>
+						</div>
+					</div>
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="quote-box">
+								<strong>elinthind said:</strong><br>
+								Could you clarify what is meant by a "fair" race in the hippo puzzle?<br><br>thanks!
+							</div>
+							<div>Fair as in both of you following the rules set by the competition and any additional rules you may agree upon. They think of predeciding the looser and then sharing the prize as unfair.</div>
+						</div>
+					</div>
+				`,
+				solution: `
+					<div class="result-box">
+						<div>Nobody liked the Hippos :(<br>
+						Got very few submissions, but unfortunately one of them was correct so no hints are given...<br>
+						This was a vague puzzle too where I might've accepted alternative solutions...<br>
+						Unfortunately not Dogparty's though, as it was stated in the puzzle that they don't wish to share the prize.<br>
+						<br>
+						The solution should be to simply <strong>swap Hippos</strong> (or tickets, whichever you find easier).<br>
+						By using eachother's Hippos, the consolation prize will actually go to the winner rather than the looser.<br>
+						<br>
+						As Elinthind pointed out, this does assume that both racers play fairly and do reach the goal though,<br>
+						so if somebody play unfairly, then the first person reaching the goal would still have to<br>
+						go back to drag their own Hippo to the goal as well.</div>
+					</div>
+				`
+			},
+			{
+				id: 6,
+				title: "The Four Vehicles",
+				content: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="puzzle-box">
+								<div>After coming to an agreement, you both dart off towards the goal at once.<br>
+								Its a close call, but luckily you manage to secure the consolation prize.<br>
+								You quickly open the map and... Its empty!<br>
+								Well, nothing to do about that now... You stuck it in your backpack and continue moving forward.<br>
+								After walking on Route 12 for a while, you arrive at a crossroad.<br>
+								This wasn't here last time, did they change the path?<br>
+								You are unsure which way you are supposed to go, but thankfully you notice a familiar face standing there.<br>
+								Its Mr. Rhyme! I wonder what he is doing out here?<br>
+								He is willing to help you find the right path if you solve one of his favourite puzzles:<br>
+								</div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div>There are four different type of vehicles traveling in the ocean exactly 500 meters apart from eachother.<br>
+								At the front is a luxury yacht. On the left side an old sailboat. On the right a large steamboat.<br>
+								<center><img src="boats.png" alt="Boats diagram" class="puzzle-image"></center></div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div><strong>What is the fourth vehicle?</strong></div>
+							</div>
+						</div>
+					</div>
+				`,
+				hints: `
+					<div class="message">
+						<div class="message-header rangers">
+							<img src="elinthind_avatar.jpg" alt="elinthind" class="avatar rangers">
+							<div class="username rangers">elinthind</div>
+						</div>
+						<div class="message-content">
+								<div>Also, when you say "500 meters apart" in the vehicle puzzle--does that mean each vehicle is at least 500 meters away from the others in each direction? Is the image to scale, or is it just for flavor?<br><br>thanks!</div>
+						</div>
+					</div>
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="quote-box">
+								<strong>elinthind said:</strong><br>
+								Also, when you say "500 meters apart" in the vehicle puzzle--does that mean each vehicle is at least 500 meters away from the others in each direction? Is the image to scale, or is it just for flavor?<br><br>thanks!
+							</div>
+							<div>The image for the ships is meant to be accurate, however it was not measured so it could be off by a few cms. If you used a ruler to determine that the 3 boats on the image are not equidistant than thats just slight drawing error.</div>
+						</div>
+					</div>
+				`,
+				solution: `
+					<div class="result-box">
+						<div>Puzzle 6 deadline is closed!<br>
+						We had many great submissions for this puzzle!<br>
+						As for the solution, 4 objects can only be of equal distance from eachother if they are placed into the corners of a pyramid shape.<br>
+						This means, that the last vehicle must be either above or below the sea level.<br>
+						Since it was specified that they are in the sea, the correct solution is a submarine!<br>
+						I'd like to congratulate to Venia Silente for deducting that it may be a nuclear submarine<br>
+						at that given that all vehicles are using a different power source.<br>
+						This was not a neccessary part of the solution though, and unfortunately have no way to give bonus points for it.</div>
+					</div>
+				`
+			},
+			{
+				id: 7,
+				title: "The Cave Passage",
+				content: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="puzzle-box">
+								<div>You manage to arrive to Shalour City safely and take a short rest at the inn.<br>
+								The following morning as you approach the cave, you notice a small crowd in front of it:<br>
+								<br>
+								You learn that there was a cave-in at the passage, making it significantly more difficult to get through<br>
+								and the sunlight that used to seep through the ceiling is blocked.<br>
+								The Hiker has a lamp, but no candles left and don't want to walk back to Lumiosa City for the nearest candle shop<br>
+								so they ask you for their help:</div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div>Due to the passage becoming thinner, and under the dim light of the candle, only 2 people may pass at a time.<br>
+								The Hiker, having experience, can pass the cave in 1 hour.<br>
+								The Psychic, as a regular person would take 2 hours.<br>
+								The Socialite may be old but healthy. Needs 4 hours to pass.<br>
+								Mr. Rhyme, due to his bad leg, requires 5 hours.<br>
+								<center><img src="caveentrance.png" alt="Boats diagram" class="puzzle-image"></center></div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div><strong>If a candle burns for 1 hour, how many candles do you need to lend<br>
+								so that all of them can pass while you go to explore the deeper parts of the cave?</strong></div>
+							</div>
+						</div>
+					</div>
+				`,
+				hints: `
+					<div class="message">
+						<div class="message-header rangers">
+							<img src="elinthind_avatar.jpg" alt="elinthind" class="avatar rangers">
+							<div class="username rangers">elinthind</div>
+						</div>
+						<div class="message-content">
+								<div>Hi! Looking for a bit of clarification on this question:<br>
+							Do the travelers need to find a way to always have access to the lamp, or is simply having a candle fine?<br>
+							Are the travelers fine with traveling at a slower pace?<br>
+							Does the "only 2 people can pass at a time" mean that a candle can be shared between a maximum of two people? (I'm assuming so, but you know what they say about assumptions)<br>
+							Is it alright if more than one "bunch" of people passes through the cave at once, if each group has their own candle? Assuming the first group is farther ahead than the second. And, if so, is there enough room in the cave for people to switch between groups?<br>
+							<br>
+							Or, does having one candle in the cave count as having the whole "cave" being lit, and only 2 people can be in the cave at one time?</div>
+						</div>
+					</div>
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="quote-box">
+								<strong>elinthind said:</strong><br>
+								Hi! Looking for a bit of clarification on this question:...
+							</div>
+							<div>They may not hold the candle in their hands as it is too hot, nor in any flammable material.<br>
+							A traveler cannot move forward in darkness.<br>
+							The lamp (candlelight) only provides enough light for two people at a time.<br>
+							When people move as a group, they move at the pace of the slowest member of that group.</div>
+						</div>
+					</div>
+				`,
+				solution: `
+					<div class="result-box">
+						<div>Traditionally, this puzzle is solved by having the travelers pass in groups of two,<br>
+						and somebody repeatedly coming back with the lamp to pick up another person.<br>
+						However, if you knew the puzzle, it was easy to get it wrongly,<br>
+						because this time it had a slight twist!<br>
+						<br>
+						The Psychic, as shown in the image, can <strong>levitate small objects</strong> the size of a candle.<br>
+						Assuming they can do so for 2 hours straight, two groups may try to pass simultaneously,<br>
+						and they'd only need <strong>7 candles</strong>!</div>
+					</div>
+				`
+			},
+			{
+				id: 8,
+				title: "The Cave Map",
+				content: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="puzzle-box">
+								<div>As you reach into your backpack for a stack of candles for the group, the map falls out your bag.<br>
+								As you pick it up, you notice a weird reflection in a smooth rock near the entrance.<br>
+								Its a map of the cave!</div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div>As you suspected, the map never was empty, but there was a slight trick to it:<br>
+								It was written with special ink only visible in the strange mirror-like rocks of Reflection Cave!<br>
+								<center><img src="cave map.png" alt="Cave map with numbered paths" class="puzzle-image"></center></div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div>It looks like there may be multiple paths leading to the tree you seek,<br>
+								however you dont have a large enough stock of candles to roam freely,<br/>
+								<strong>can you find the fastest path to the hidden groove?</strong></div>
+							</div>
+						</div>
+					</div>
+				`,
+				hints: `
+					<div class="message">
+						<div class="message-header rangers">
+							<img src="venia_silente_avatar.jpg" alt="Venia" class="avatar rangers">
+							<div class="username rangers">Venia Silente</div>
+						</div>
+						<div class="message-content">
+							<div>A bit of clarification on the map:<br><br>
+							What do the numbers represent? Cost in candles to reach each spot? Speed limit? (hey, safety in caves is important!)</div>
+						</div>
+					</div>
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="quote-box">
+								<strong>Venia Silente said:</strong><br>
+								A bit of clarification on the map:<br><br>
+								What do the numbers represent? Cost in candles to reach each spot? Speed limit? (hey, safety in caves is important!)
+							</div>
+							<div>The time (or distance) needed to get there from a previous number. You may interpret the puzzle as finding a path with the smallest sum of the numbers on that path</div>
+						</div>
+					</div>
+					<div class="message">
+						<div class="message-header rangers">
+							<img src="elinthind_avatar.jpg" alt="Elinthind" class="avatar rangers">
+							<div class="username rangers">Elinthind</div>
+						</div>
+						<div class="message-content">
+							<div>what is the little symbol at the bottom right of the map? Is that our location?<br>
+							(I assumed so but i have learned to be wary of my assumptions here lol)</div>
+						</div>
+					</div>
+				`,
+				solution: `
+					<div class="result-box">
+						<div>Solving the map was surprisingly simply, almost as if I sent the wrong image,<br>
+						regardless, all submissions turned out to be correct...<br>
+						I also forgot to specify that you cannot go around the cave, so while its not the intended solution,<br>
+						I'll have to accept that too. Nobody submitted both however, so the achievement for<br>
+						two correct solutions submitted remains unclaimed.<br>
+						<br>
+						Earlier, somebody asked what the symbol at the bottom is. I did not answer this question,<br>
+						because the puzzle provides enough details to figure it out and it is in fact a key part<br>
+						of the puzzle - even if it was trivial to most participants.<br>
+						To those who havent played the newer generation games: This is the in-game sprite of the<br>
+						Shalour Sable, a local delicacy sold only in Shalour City and is merely a symbol<br>
+						representing the settlement. You do not need to turn around and start the map at the Tower of Mastery.<br>
+						<center><img src="map_solution.png" alt="Map solution showing optimal path" class="puzzle-image"></center></div>
+					</div>
+				`
+			},
+			{
+				id: 9,
+				title: "The Ancient Lock",
+				content: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="puzzle-box">
+								<div>You follow the map's instructions and eventually reach a large builder with a smooth surface.<br>
+								Somebody has drawn strange symbols on the rocks. Upon closer inspection, these appear to be buttons!</div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div>You press one to see what happens, but it jumps right back into position and nothing happens, there must be some sort of code to enter...<br>
+								<center><img src="LOCK.png" alt="Ancient lock with button pattern" class="puzzle-image"></center></div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div><strong>Send me which buttons you press and in what order!</strong></div>
+							</div>
+						</div>
+					</div>
+				`,
+				hints: ``,
+				solution: `
+					<div class="result-box">
+						<div>The letter in the puzzle represent a direction: Up, Down, Left, Right.<br>
+						Each button has to be pressed once, finishing with the middle button<br>
+						If you figured this out, you can simply add the number of steps<br>
+						that need to be taken in every direction:<br>
+						7 Left, 9 Right, 18 Down,17 Up<br>
+						So you need to start <strong>2 steps to the left and 1 step up from the middle button</strong>.</div>
+					</div>
+				`
+			},
+			{
+				id: 10,
+				title: "The Guardian Dog",
+				content: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="puzzle-box">
+								<div>You crack the code open and an ancient door slowly creaks open,<br>
+								revealing a long, narrow passage leading further up the mountain.<br>
+								You walk for another half an hour or so before seeing the light at the end of the tunnel.<br>
+								Finally, you step out into the meadow and find yourself on a cliffside.<br>
+								In the middle, you spot the tree from the rumours!<br>
+								However, someone has already been here before you!</div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div>Tied to its trunk is a Pokémon the previous visitor has left behind for protection.<br>
+								It seems to be in great condition despite seemingly being alone, with food and water provided<br>
+								for it in two bowls below the tree as well. Couldn't have been stuck there for more than an hour.<br>
+								Perhaps its owner is still nearby or planning to return shortly.<br>
+								Either way, you don't wish to wait for their return, just grab some fruits and head back home.<br>
+								However, the dog was clearly placed here with a mission. Anywhere you go it'll try to follow<br>
+								and if you get within range it'll attack immediately.<br>
+								<center><img src="guarddog.png" alt="Guard dog tied to tree with food and water bowls" class="puzzle-image"></center></div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div><strong>How can you get to the fruits safely?</strong></div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div><span style="font-size: 18px">List of available items:</span><br>
+								<ul>
+									<li>a worn-out backpack</li>
+									<li>sleeping bag</li>
+									<li>knife</li>
+									<li>pickaxe</li>
+									<li>helmet</li>
+									<li>raincoat</li>
+									<li>30 meters of rope</li>
+									<li>lamp</li>
+									<li>one last candle</li>
+									<li>a sandwitch</li>
+									<li>water bottle (almost empty)</li>
+									<li>map of the cave</li>
+								</ul></div>
+							</div>
+						</div>
+					</div>
+				`,
+				hints: ``,
+				solution: `
+					<div class="result-box">
+						<div>Puzzle 10 deadline is closed!<br>
+						Just as I was getting worried of the difficulty, 5qwerty has submitted the correct answer!<br>
+						There isn't really anything in your bag that could reliably distract the Mabostiff, the item list was<br>
+						provided as a distraction and to incentivise creative solutions I didn't think of (for the achievement).<br>
+						You start slowly circling around the tree outside of the Pokémon's range as it is carefully watching and following you.<br>
+						As you both keep going in circles, the leash gets entangled onto the tree's trunk and gradually becomes shorter.<br>
+						Eventually you get close enough to reach one of the further branches and grab a fruit without fully reaching the tree.</div>
+					</div>
+				`
+			},
+			{
+				id: 11,
+				title: "Descending the cliffside",
+				content: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+							<div class="puzzle-box">
+								<div>The mission was a success! Now you can return and plant the fruit in your own city!<br>
 								However, your resources are running low and you are aware somebody has been here shortly before you.<br>
 								If it were a member of the opposing team, they'd return with the fruits before you do! There is but one way to solve both issues at once:<br>
 								Descending down the cliffside! You can even see Shalour City nearby, a much faster stroll through the woods.<br>
 								instead of having to go through the maze again.<br>
-                                </div>
-                            </div>
+								</div>
+							</div>
+							<hr>
 							<div class="puzzle-box">
-                                <div>You see a large builder near the edge, where you could tie your rope.<br>
+								<div>You see a large builder near the edge, where you could tie your rope.<br>
 								The biggest problem with this is that your rope isnt quite long enough.<br>
 								You're about 40 meters high up with only 30 meters of rope.<br>
 								Theres no way you'd survive jumping down the last 10 meters.<br>
 								You do see another cliff about halfway down, where you could rest and tie another rope if you had one...<br>
 								But unfortunately you don't.<br>
-                                <img src="Descend.png" alt="Descend" class="puzzle-image">
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="puzzle-box">
-                                <div><strong>Is there any way you could descend safely?</strong></div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                hints: `
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="dogparty_avatar.webp" alt="Dogparty" class="avatar brawlers">
-                            <div class="username brawlers">Dogparty</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div>Hi, if I think of a few different solutions to try can I submit all of them? Or is that cheating?<br>
-                            Just checking!</div>
-                        </div>
-                    </div>
-                    <div class="message">
-                        <div class="message-header brawlers">
-                            <img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
-                            <div class="username brawlers">apro</div>
-                        </div>
-                        <div class="message-content">
-                                                        <div class="quote-box">
-                                <strong>Dogparty said:</strong><br>
-                                Hi, if I think of a few different solutions to try can I submit all of them? Or is that cheating?
-                            </div>
-                            <div>You can submit them all.<br>
-                            In that case, only the last one will be considered for giving points, however if multiple were correct you may get an achievement.<br>
-                            Or you could submit them conditionally, i.e. "I'd Fly down the cliff if my character has wings, otherwise try to use Teleport", as long as the condition is only used to bypass having to ask if something is allowed or not.</div>
-                        </div>
-                    </div>
-                `,
-                solution: `
-                    <div class="result-box">
-                        <div>Puzzle 11 deadline is closed!<br>
-                        This was a tough one but also a puzzle with several different solutions.<br>
-                        I have received 3 submissions total:<br>
+								<center><img src="Descend.png" alt="Descend" class="puzzle-image"></center></div>
+							</div>
+							<hr>
+							<div class="puzzle-box">
+								<div><strong>Is there any way you could descend safely?</strong></div>
+							</div>
+						</div>
+					</div>
+				`,
+				hints: `
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="dogparty_avatar.webp" alt="Dogparty" class="avatar brawlers">
+							<div class="username brawlers">Dogparty</div>
+						</div>
+						<div class="message-content">
+								<div>Hi, if I think of a few different solutions to try can I submit all of them? Or is that cheating?<br>
+							Just checking!</div>
+						</div>
+					</div>
+					<div class="message">
+						<div class="message-header brawlers">
+							<img src="apro_avatar.jpg" alt="apro" class="avatar brawlers">
+							<div class="username brawlers">apro</div>
+						</div>
+						<div class="message-content">
+								<div class="quote-box">
+								<strong>Dogparty said:</strong><br>
+								Hi, if I think of a few different solutions to try can I submit all of them? Or is that cheating?
+							</div>
+							<div>You can submit them all.<br>
+							In that case, only the last one will be considered for giving points, however if multiple were correct you may get an achievement.<br>
+							Or you could submit them conditionally, i.e. "I'd Fly down the cliff if my character has wings, otherwise try to use Teleport", as long as the condition is only used to bypass having to ask if something is allowed or not.</div>
+						</div>
+					</div>
+				`,
+				solution: `
+					<div class="result-box">
+						<div>Puzzle 11 deadline is closed!<br>
+						This was a tough one but also a puzzle with several different solutions.<br>
+						I have received 3 submissions total:<br>
 
-                        Devalue thought of unbraiding the rope and remaking it into a slightly longer rope.<br>
-                        This is a tedious task that needs some crafting skill, but depending on the thickness of the original rope<br>
-                        (which wasnt specified) it could work and still be faster than going back to the cave.<br>
+						Devalue thought of unbraiding the rope and remaking it into a slightly longer rope.<br>
+						This is a tedious task that needs some crafting skill, but depending on the thickness of the original rope<br>
+						(which wasnt specified) it could work and still be faster than going back to the cave.<br>
 
-                        Dogparty has come up with multiple creative solutions, in particular trying to climb down while holding<br>
-                        both ends of the rope in your hands and not tying it at all so you can pull it down once you get to the<br>
-                        resting point. However I cannot give points for those as they still require you to jump several meters down, which is too risky.<br>
-                        <img src="Descend_submission_1.png" alt="Descend_1" class="puzzle-image">
-                        5qwerty's solution may be the safest option, placing a lit candle next to the rock, close to the rope,<br>
-                        so that it would light the rope on fire after some time once the candle gets shorter and release the knot, making the rope fall down.<br>
+						Dogparty has come up with multiple creative solutions, in particular trying to climb down while holding<br>
+						both ends of the rope in your hands and not tying it at all so you can pull it down once you get to the<br>
+						resting point. However I cannot give points for those as they still require you to jump several meters down, which is too risky.<br>
+						<center><img src="Descend_submission_1.png" alt="Descend_1" class="puzzle-image"></center>
+						5qwerty's solution may be the safest option, placing a lit candle next to the rock, close to the rope,<br>
+						so that it would light the rope on fire after some time once the candle gets shorter and release the knot, making the rope fall down.<br>
 
-                        The correct solution also uses the candle in a similar way. You tie the rope in such a way that a 20m and<br>
-                        a 10m half is dangling down. You climb down the 20m half and once you reach 10m, you light the 10m half on fire.<br>
-                        Once the fire reaches the top, the knot gets undone and the other 20m half of the rope falls down to you.
-                        <img src="Descend_solution.png" alt="Descend solution" class="puzzle-image"></div>
-                    </div>
-                `
-            }
-        ];
+						The correct solution also uses the candle in a similar way. You tie the rope in such a way that a 20m and<br>
+						a 10m half is dangling down. You climb down the 20m half and once you reach 10m, you light the 10m half on fire.<br>
+						Once the fire reaches the top, the knot gets undone and the other 20m half of the rope falls down to you.
+						<center><img src="Descend_solution.png" alt="Descend solution" class="puzzle-image"></center></div>
+					</div>
+				`
+			}
+		];
 
-        function loadPuzzle(index) {
-            const puzzle = puzzles[index];
-            document.getElementById('puzzle-content').innerHTML = puzzle.content;
-            document.getElementById('hints-content').innerHTML = puzzle.hints;
-            document.getElementById('solution-content').innerHTML = puzzle.solution;
-            document.getElementById('puzzleCounter').textContent = `Puzzle ${puzzle.id} of ${puzzles[puzzles.length - 1].id}`;
-            
-            // Update navigation buttons
-            document.getElementById('prevBtn').disabled = index === 0;
-            document.getElementById('nextBtn').disabled = index === puzzles.length - 1;
-            
-            // Reset visibility
-            hideHints();
-            hideSolution();
-            
-            // Update hints button visibility
-            const hintsBtn = document.getElementById('hintsBtn');
-            if (puzzle.hints.trim() === '') {
-                hintsBtn.style.display = 'none';
-            } else {
-                hintsBtn.style.display = 'inline-block';
-            }
-        }
+		function loadPuzzle(index) {
+			const puzzle = puzzles[index];
+			document.getElementById('puzzle-content').innerHTML = puzzle.content;
+			document.getElementById('hints-content').innerHTML = puzzle.hints;
+			document.getElementById('solution-content').innerHTML = puzzle.solution;
+			document.getElementById('puzzleCounter').textContent = `Puzzle ${puzzle.id} of ${puzzles[puzzles.length - 1].id}`;
+			
+			// Update navigation buttons
+			document.getElementById('prevBtn').disabled = index === 0;
+			document.getElementById('nextBtn').disabled = index === puzzles.length - 1;
+			
+			// Reset visibility
+			hideHints();
+			hideSolution();
+			
+			// Update hints button visibility
+			const hintsBtn = document.getElementById('hintsBtn');
+			if (puzzle.hints.trim() === '') {
+				hintsBtn.style.display = 'none';
+			} else {
+				hintsBtn.style.display = 'inline-block';
+			}
+		}
 
-        function nextPuzzle() {
-            if (currentPuzzle < puzzles.length - 1) {
-                currentPuzzle++;
-                loadPuzzle(currentPuzzle);
-            }
-        }
+		function nextPuzzle() {
+			if (currentPuzzle < puzzles.length - 1) {
+				currentPuzzle++;
+				loadPuzzle(currentPuzzle);
+			}
+		}
 
-        function previousPuzzle() {
-            if (currentPuzzle > 0) {
-                currentPuzzle--;
-                loadPuzzle(currentPuzzle);
-            }
-        }
+		function previousPuzzle() {
+			if (currentPuzzle > 0) {
+				currentPuzzle--;
+				loadPuzzle(currentPuzzle);
+			}
+		}
 
-        function toggleHints() {
-            const hintsSection = document.getElementById('hints-section');
-            const hintsBtn = document.getElementById('hintsBtn');
-            
-            if (hintsVisible) {
-                hideHints();
-            } else {
-                showHints();
-            }
-        }
+		function toggleHints() {
+			const hintsSection = document.getElementById('hints-section');
+			const hintsBtn = document.getElementById('hintsBtn');
+			
+			if (hintsVisible) {
+				hideHints();
+			} else {
+				showHints();
+			}
+		}
 
-        function showHints() {
-            const hintsSection = document.getElementById('hints-section');
-            const hintsBtn = document.getElementById('hintsBtn');
-            
-            hintsSection.classList.remove('hidden');
-            hintsBtn.textContent = 'Hide Hints & Comments';
-            hintsVisible = true;
-        }
+		function showHints() {
+			const hintsSection = document.getElementById('hints-section');
+			const hintsBtn = document.getElementById('hintsBtn');
+			
+			hintsSection.classList.remove('hidden');
+			hintsBtn.textContent = 'Hide Hints & Comments';
+			hintsVisible = true;
+		}
 
-        function hideHints() {
-            const hintsSection = document.getElementById('hints-section');
-            const hintsBtn = document.getElementById('hintsBtn');
-            
-            hintsSection.classList.add('hidden');
-            hintsBtn.textContent = 'Show Hints & Comments';
-            hintsVisible = false;
-        }
+		function hideHints() {
+			const hintsSection = document.getElementById('hints-section');
+			const hintsBtn = document.getElementById('hintsBtn');
+			
+			hintsSection.classList.add('hidden');
+			hintsBtn.textContent = 'Show Hints & Comments';
+			hintsVisible = false;
+		}
 
-        function toggleSolution() {
-            const solutionSection = document.getElementById('solution-section');
-            const solutionBtn = document.getElementById('solutionBtn');
-            
-            if (solutionVisible) {
-                hideSolution();
-            } else {
-                showSolution();
-            }
-        }
+		function toggleSolution() {
+			const solutionSection = document.getElementById('solution-section');
+			const solutionBtn = document.getElementById('solutionBtn');
+			
+			if (solutionVisible) {
+				hideSolution();
+			} else {
+				showSolution();
+			}
+		}
 
-        function showSolution() {
-            const solutionSection = document.getElementById('solution-section');
-            const solutionBtn = document.getElementById('solutionBtn');
-            
-            solutionSection.classList.remove('hidden');
-            solutionBtn.textContent = 'Hide Solution';
-            solutionVisible = true;
-        }
+		function showSolution() {
+			const solutionSection = document.getElementById('solution-section');
+			const solutionBtn = document.getElementById('solutionBtn');
+			
+			solutionSection.classList.remove('hidden');
+			solutionBtn.textContent = 'Hide Solution';
+			solutionVisible = true;
+		}
 
-        function hideSolution() {
-            const solutionSection = document.getElementById('solution-section');
-            const solutionBtn = document.getElementById('solutionBtn');
-            
-            solutionSection.classList.add('hidden');
-            solutionBtn.textContent = 'Show Solution';
-            solutionVisible = false;
-        }
+		function hideSolution() {
+			const solutionSection = document.getElementById('solution-section');
+			const solutionBtn = document.getElementById('solutionBtn');
+			
+			solutionSection.classList.add('hidden');
+			solutionBtn.textContent = 'Show Solution';
+			solutionVisible = false;
+		}
 
-        // Keyboard navigation
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'ArrowLeft' && currentPuzzle > 0) {
-                previousPuzzle();
-            } else if (event.key === 'ArrowRight' && currentPuzzle < puzzles.length - 1) {
-                nextPuzzle();
-            } else if (event.key === 'h' || event.key === 'H') {
-                const hintsBtn = document.getElementById('hintsBtn');
-                if (hintsBtn.style.display !== 'none') {
-                    toggleHints();
-                }
-            } else if (event.key === 's' || event.key === 'S') {
-                toggleSolution();
-            }
-        });
+		// Keyboard navigation
+		document.addEventListener('keydown', function(event) {
+			if (event.key === 'ArrowLeft' && currentPuzzle > 0) {
+				previousPuzzle();
+			} else if (event.key === 'ArrowRight' && currentPuzzle < puzzles.length - 1) {
+				nextPuzzle();
+			} else if (event.key === 'h' || event.key === 'H') {
+				const hintsBtn = document.getElementById('hintsBtn');
+				if (hintsBtn.style.display !== 'none') {
+					toggleHints();
+				}
+			} else if (event.key === 's' || event.key === 'S') {
+				toggleSolution();
+			}
+		});
 
-        // Initialize the first puzzle
-        loadPuzzle(currentPuzzle);
-    </script>
+		// Initialize the first puzzle
+		loadPuzzle(currentPuzzle);
+	</script>
 </body>
 </html>
